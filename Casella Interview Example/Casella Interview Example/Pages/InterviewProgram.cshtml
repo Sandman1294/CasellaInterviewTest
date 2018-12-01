@@ -4,20 +4,26 @@
     ViewData["Title"] = "InterviewProgram";
 }
 @{
+    //Setting up an array of separators to allow for breaking up of the text file
     char[] separators = { ' ', '.', '!', ',' };
     if (Request.Method == "POST")
-    {
+    {//If the current loaded webpage is a http post
 
+        //Retrieves the information entered on the from including the File Directory and the File Name
         string fileDir = Request.Form["FileDir"];
         string fileName = Request.Form["FileName"];
 
-        string outputFileName = fileName + "Frequency.JSON";
+        //Creates the output file name
+        string outputFileName = fileName + "_frequency.JSON";
 
+        //Creation of the strings for outputing the information
         string lineOne = "";
         string lineTwo = "";
 
+        //Reading in all the text from the text file.
         string fileText = System.IO.File.ReadAllText(@fileDir);
 
+        //Creation of the counters and the percentage counts.
         int whitespaceCount = fileText.Count(Char.IsWhiteSpace);
         int punctuationCount = fileText.Count(Char.IsPunctuation);
         int totalWordCount = 0;
@@ -25,35 +31,45 @@
         decimal whitespacePercent = (decimal)whitespaceCount/(decimal)totalCharacters;
         decimal punctuationPercent = (decimal)punctuationCount/(decimal)totalCharacters;
 
-
+        //Creation of the dictionary that will contain the words and the value of the words.
         var wordCount = new Dictionary<string, int>();
 
+        //Creates an array of all of the words in the text file to determining the word
         var words = fileText.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (var word in words)
-        {
-            word.Trim();
+        {//Goes through the array of all the words in the 
+            word.Trim();//Cuts off the white space including spaces and returns
             if (wordCount.ContainsKey(word))
-            {
+            {//If the word is already in the dictionary increment the value and increments the total word count
                 wordCount[word] = wordCount[word] + 1;
                 totalWordCount++;
             }
             else
-            {
+            {//If the word is not in the dictionary add the word with value 1 and increment the total word count
                 wordCount.Add(word, 1);
                 totalWordCount++;
             }
         }
 
+        if(System.IO.File.Exists(outputFileName))
+        {
+            //If the file exist prior to outputing the data delete it
+            System.IO.File.Delete(outputFileName);
+        }
+
+        //Opens the file outupt creating the file 
         using (System.IO.StreamWriter file =
             new System.IO.StreamWriter(outputFileName, true))
         {
+            //Outputs the opening of the file
             file.WriteLine("{");
             file.WriteLine("\"Frequency\": [");
 
             foreach (var item in wordCount.OrderByDescending(r => r.Value).Take(50))
             {
-
+                //For each word in the dictionary sorted in descending order
+                //it will output the word and the frequency of the word in the file
                 lineOne = "\"Word\": \"" + item.Key.Trim() + "\",";
                 lineTwo = "\"Frequency\": " + item.Value;
                 file.WriteLine("{");
@@ -61,6 +77,7 @@
                 file.WriteLine(lineTwo);
                 file.WriteLine("},");
             }
+            //Outputs the ending of the Frequency section and the Word counts and the Percentages
             file.WriteLine("],");
             file.WriteLine("\"WordCount\":" + totalWordCount + ",");
             file.WriteLine("\"WhitespacePercentage\":" + whitespacePercent + ",");
