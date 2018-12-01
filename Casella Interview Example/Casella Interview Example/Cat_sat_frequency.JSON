@@ -1,0 +1,83 @@
+{
+"Frequency": [
+{
+"Word": "that",
+"Frequency": 4
+},
+{
+"Word": "the",
+"Frequency": 2
+},
+{
+"Word": "sat",
+"Frequency": 2
+},
+{
+"Word": "And",
+"Frequency": 2
+},
+{
+"Word": "was",
+"Frequency": 2
+},
+{
+"Word": "cat",
+"Frequency": 1
+},
+{
+"Word": "on",
+"Frequency": 1
+},
+{
+"Word": "mat",
+"Frequency": 1
+},
+{
+"Word": "seeing",
+"Frequency": 1
+},
+{
+"Word": "he",
+"Frequency": 1
+},
+{
+"Word": "The",
+"Frequency": 1
+},
+{
+"Word": "dog",
+"Frequency": 1
+},
+{
+"Word": "very",
+"Frequency": 1
+},
+{
+"Word": "matter",
+"Frequency": 1
+},
+{
+"Word": "of",
+"Frequency": 1
+},
+{
+"Word": "fact",
+"Frequency": 1
+},
+{
+"Word": "Decided",
+"Frequency": 1
+},
+{
+"Word": "it",
+"Frequency": 1
+},
+{
+"Word": "time",
+"Frequency": 1
+},
+],
+"WordCount":26,
+"WhitespacePercentage":0.2615384615384615384615384615,
+"PunctuationPercentage":0.0384615384615384615384615385,
+}
