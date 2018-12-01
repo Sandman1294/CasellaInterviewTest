@@ -1,0 +1,76 @@
+﻿@page
+@model Casella_Interview_Example.Pages.InterviewProgramModel
+@{
+    ViewData["Title"] = "InterviewProgram";
+}
+@{
+    char[] separators = { ' ', '.', '!', ',' };
+    if (Request.Method == "POST")
+    {
+
+        string fileText = Request.Form["FileText"];
+        string fileName = Request.Form["FileName"];
+
+        string outputFileName = fileName + "Frequency.JSON";
+
+        string lineOne = "";
+        string lineTwo = "";
+
+        int whitespaceCount = fileText.Count(Char.IsWhiteSpace);
+        int punctuationCount = fileText.Count(Char.IsPunctuation);
+        int totalWordCount = 0;
+        int totalCharacters = fileText.Count();
+        decimal whitespacePercent = (decimal)whitespaceCount/(decimal)totalCharacters;
+        decimal punctuationPercent = (decimal)punctuationCount/(decimal)totalCharacters;
+
+
+        var wordCount = new Dictionary<string, int>();
+
+        var words = fileText.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var word in words)
+        {
+            word.Trim();
+            if (wordCount.ContainsKey(word))
+            {
+                wordCount[word] = wordCount[word] + 1;
+                totalWordCount++;
+            }
+            else
+            {
+                wordCount.Add(word, 1);
+                totalWordCount++;
+            }
+        }
+
+        using (System.IO.StreamWriter file =
+            new System.IO.StreamWriter(outputFileName, true))
+        {
+            file.WriteLine("{");
+            file.WriteLine("\"Frequency\": [");
+
+            foreach (var item in wordCount.OrderByDescending(r => r.Value).Take(50))
+            {
+
+                lineOne = "\"Word\": \"" + item.Key.Trim() + "\",";
+                lineTwo = "\"Frequency\": " + item.Value;
+                file.WriteLine("{");
+                file.WriteLine(lineOne);
+                file.WriteLine(lineTwo);
+                file.WriteLine("},");
+            }
+            file.WriteLine("],");
+            file.WriteLine("\"WordCount\":" + totalWordCount + ",");
+            file.WriteLine("\"WhitespacePercentage\":" + whitespacePercent + ",");
+            file.WriteLine("\"PunctuationPercentage\":" + punctuationPercent + ",");
+            file.WriteLine("}");
+        }
+    }
+}
+<h2>InterviewProgram</h2>
+
+<form method="post">
+    File Name: <input type="text" name="fileName" /> <br/>
+    File Text: <textarea cols="40" rows="5" style="width:50%; height:300px;" name="FileText" id="FileText" value=""></textarea><br>
+    <input type="submit">
+</form>
