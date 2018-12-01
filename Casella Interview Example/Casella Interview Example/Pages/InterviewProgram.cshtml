@@ -8,13 +8,15 @@
     if (Request.Method == "POST")
     {
 
-        string fileText = Request.Form["FileText"];
+        string fileDir = Request.Form["FileDir"];
         string fileName = Request.Form["FileName"];
 
         string outputFileName = fileName + "Frequency.JSON";
 
         string lineOne = "";
         string lineTwo = "";
+
+        string fileText = System.IO.File.ReadAllText(@fileDir);
 
         int whitespaceCount = fileText.Count(Char.IsWhiteSpace);
         int punctuationCount = fileText.Count(Char.IsPunctuation);
@@ -70,7 +72,7 @@
 <h2>InterviewProgram</h2>
 
 <form method="post">
-    File Name: <input type="text" name="fileName" /> <br/>
-    File Text: <textarea cols="40" rows="5" style="width:50%; height:300px;" name="FileText" id="FileText" value=""></textarea><br>
+    New File Name: <input type="text" name="fileName" /> <br/>
+    File Directory: <input type="text" name="fileDir" value=""><br>
     <input type="submit">
 </form>
